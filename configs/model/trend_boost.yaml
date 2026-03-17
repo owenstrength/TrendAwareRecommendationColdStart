@@ -1,0 +1,10 @@
+trend_window_hours: 72
+top_trend_fraction: 0.1
+cold_item_max_interactions: 10
+similarity_metric: cosine
+modality_weights:
+  visual: 0.4
+  text: 0.4
+  audio: 0.2
+boost_weight: 0.35
+virality_prior_smoothing: 5.0
