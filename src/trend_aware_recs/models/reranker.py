@@ -26,9 +26,14 @@ def rerank_with_trend_boost(
     modality_weights: dict[str, float],
     boost_weight: float,
     smoothing: float,
+    disable_personalization: bool = False,
 ) -> list[RankedScore]:
     trend_items = [items[item_id] for item_id in trending_item_ids if item_id in items]
-    affinity = compute_user_virality_affinity(user_id, interactions, trending_item_ids, smoothing)
+    affinity = (
+        1.0
+        if disable_personalization
+        else compute_user_virality_affinity(user_id, interactions, trending_item_ids, smoothing)
+    )
 
     scored: list[RankedScore] = []
     for candidate in candidates:
