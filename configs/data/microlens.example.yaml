@@ -1,0 +1,21 @@
+# Example data configuration for the MicroLens dataset.
+# Adjust paths after downloading the dataset with scripts/get_microlens.sh.
+dataset_name: microlens_50k
+
+# Path to the interaction log CSV (columns: user_id, item_id, timestamp)
+interaction_path: data/microlens/interactions.csv
+
+# Paths to pre-extracted multimodal embedding files (numpy .npy format, shape [N, D])
+item_feature_paths:
+  visual: data/microlens/visual_embeddings.npy
+  text: data/microlens/text_embeddings.npy
+  audio: data/microlens/audio_embeddings.npy
+
+# Path to item metadata CSV (columns: item_id, interaction_count, ...)
+item_metadata_path: data/microlens/item_metadata.csv
+
+# Column names used in the interaction log and item metadata files
+timestamp_column: timestamp
+user_column: user_id
+item_column: item_id
+popularity_column: interaction_count
