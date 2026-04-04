@@ -17,3 +17,15 @@ virality_prior_smoothing: 5.0
 personalization_strength: 0.0
 base_history_weight: 0.7
 base_popularity_weight: 0.3
+trainable_ranker_enabled: true
+trainable_model_type: pointwise_hgb
+trainable_max_cases: 4000
+trainable_negatives_per_case: 20
+trainable_cold_case_weight: 3.0
+trainable_blend_weight: 0.0
+trainable_hgb_max_iter: 80
+trainable_hgb_learning_rate: 0.05
+trainable_hgb_max_depth: 4
+trainable_hgb_min_samples_leaf: 40
+trainable_hard_negative_ratio: 0.75
+trainable_hard_negative_pool_size: 64

@@ -10,9 +10,9 @@ modality_weights:
   visual: 0.4
   text: 0.4
   audio: 0.2
-boost_weight: 0.1
-tag_boost_weight: 0.15
-emerging_boost_weight: 0.15
+boost_weight: 0.2
+tag_boost_weight: 0.2
+emerging_boost_weight: 0.2
 virality_prior_smoothing: 5.0
 personalization_strength: 0.0
 base_history_weight: 0.7

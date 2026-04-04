@@ -1,7 +1,7 @@
 import numpy as np
 
-from trend_aware_recs.data.schema import ItemFeatures
-from trend_aware_recs.evaluation.splits import compute_split_metrics, partition_items
+from trend_aware_recs.data.schema import EvaluationCase, ItemFeatures
+from trend_aware_recs.evaluation.splits import aggregate_case_metrics, compute_split_metrics, partition_items
 
 
 def _make_items() -> dict[str, ItemFeatures]:
@@ -36,3 +36,34 @@ def test_compute_split_metrics_cold_ndcg() -> None:
     assert metrics.overall.hit_rate == 1.0
     assert metrics.cold.hit_rate == 1.0  # cold_a is relevant and in top cold rank
     assert metrics.warm.hit_rate == 1.0  # warm_a is relevant and in top warm rank
+
+
+def test_aggregate_case_metrics_respects_positive_item_split() -> None:
+    cold_case = EvaluationCase(
+        user_id="u1",
+        positive_item_id="cold_a",
+        positive_is_cold=True,
+        timestamp=10,
+        candidates=[],
+        history_interactions=[],
+    )
+    warm_case = EvaluationCase(
+        user_id="u2",
+        positive_item_id="warm_a",
+        positive_is_cold=False,
+        timestamp=11,
+        candidates=[],
+        history_interactions=[],
+    )
+
+    summary = aggregate_case_metrics(
+        [
+            (cold_case, ["cold_a", "warm_a"]),
+            (warm_case, ["cold_b", "warm_a"]),
+        ],
+        k=1,
+    )
+
+    assert summary["overall"].hit_rate == 0.5
+    assert summary["cold"].hit_rate == 1.0
+    assert summary["warm"].hit_rate == 0.0

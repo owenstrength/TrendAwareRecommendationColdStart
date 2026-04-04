@@ -9,23 +9,64 @@ from pydantic import BaseModel, Field
 
 class DataConfig(BaseModel):
     dataset_name: str
-    interaction_path: str
-    item_feature_paths: dict[str, str]
-    item_metadata_path: str
-    timestamp_column: str
-    user_column: str
-    item_column: str
-    popularity_column: str
+    loader: str = "demo"
+    interaction_path: str | None = None
+    item_feature_paths: dict[str, str] = Field(default_factory=dict)
+    derived_feature_dir: str | None = None
+    item_metadata_path: str | None = None
+    title_path: str | None = None
+    tags_path: str | None = None
+    comments_path: str | None = None
+    engagement_path: str | None = None
+    timestamp_column: str = "timestamp"
+    user_column: str = "user"
+    item_column: str = "item"
+    popularity_column: str = "interaction_count"
+    feature_dim: int = 64
+    max_comments_per_item: int = 5
+    evaluation_fraction: float = 0.2
+    negatives_per_user: int = 99
+    min_user_train_interactions: int = 3
+    max_eval_users: int | None = 1000
 
 
 class ModelConfig(BaseModel):
     trend_window_hours: int = 72
     top_trend_fraction: float = 0.1
+    emerging_fraction: float = 0.0
+    min_trend_items: int = 20
+    emerging_min_recent_interactions: int = 2
+    emerging_smoothing: float = 1.0
     cold_item_max_interactions: int = 10
     similarity_metric: str = "cosine"
     modality_weights: dict[str, float] = Field(default_factory=dict)
     boost_weight: float = 0.35
+    tag_boost_weight: float = 0.2
+    emerging_boost_weight: float = 0.0
     virality_prior_smoothing: float = 5.0
+    personalization_strength: float = 1.0
+    base_history_weight: float = 0.7
+    base_popularity_weight: float = 0.3
+    trainable_ranker_enabled: bool = False
+    trainable_model_type: str = "pairwise_linear"
+    trainable_max_cases: int = 5000
+    trainable_negatives_per_case: int = 10
+    trainable_epochs: int = 20
+    trainable_learning_rate: float = 0.05
+    trainable_l2: float = 1e-4
+    trainable_blend_weight: float = 0.0
+    trainable_cold_case_weight: float = 1.0
+    trainable_hgb_max_iter: int = 200
+    trainable_hgb_learning_rate: float = 0.05
+    trainable_hgb_max_depth: int | None = 6
+    trainable_hgb_min_samples_leaf: int = 20
+    trainable_hard_negative_ratio: float = 0.0
+    trainable_hard_negative_pool_size: int = 50
+    evaluate_trend_aware: bool = True
+    evaluate_ablation_no_personalization: bool = True
+    evaluate_baseline_no_boost: bool = True
+    evaluate_baseline_popularity: bool = True
+    evaluate_baseline_content_nn: bool = True
 
 
 class ExperimentConfig(BaseModel):

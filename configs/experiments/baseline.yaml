@@ -1,5 +1,5 @@
 experiment_name: baseline_demo
 seed: 7
 top_k: 5
-data_settings_path: configs/data/microlens.example.yaml
+data_settings_path: configs/data/demo.yaml
 boost_settings_path: configs/model/trend_boost.yaml

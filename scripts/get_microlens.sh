@@ -144,6 +144,50 @@ download_and_extract_zip() {
   fi
 }
 
+url_exists() {
+  local url="$1"
+  curl -fsI "$url" >/dev/null 2>&1
+}
+
+download_feature_archive() {
+  local archive_url="$1"
+  local archive_path="$2"
+  local feature_dir="$3"
+  shift 3
+  local expected_files=("$@")
+
+  download_file "$archive_url" "$archive_path"
+
+  if [[ "$extract_archives" -eq 0 ]]; then
+    return
+  fi
+
+  local tmp_dir
+  tmp_dir="$(mktemp -d)"
+  trap 'rm -rf "$tmp_dir"' RETURN
+
+  echo "Extracting $archive_path -> $tmp_dir"
+  unzip -oq "$archive_path" -d "$tmp_dir"
+  mkdir -p "$feature_dir"
+
+  local missing=0
+  for file_name in "${expected_files[@]}"; do
+    local found_path
+    found_path="$(find "$tmp_dir" -type f -name "$file_name" -print -quit)"
+    if [[ -z "$found_path" ]]; then
+      echo "Expected feature file not found in archive: $file_name" >&2
+      missing=1
+      continue
+    fi
+    cp "$found_path" "${feature_dir}/${file_name}"
+  done
+
+  if [[ "$missing" -ne 0 ]]; then
+    echo "Feature archive extraction was incomplete." >&2
+    exit 1
+  fi
+}
+
 mirror_directory_listing() {
   local remote_dir="$1"
   local local_dir="$2"
@@ -199,9 +243,26 @@ if [[ "$include_features" -eq 1 ]]; then
     "MicroLens-100k_video_features_VideoMAE.npy"
   )
 
+  missing_feature_files=0
   for file_name in "${feature_files[@]}"; do
-    download_file "${base_url}/extracted_modality_features/${file_name}" "${feature_dir}/${file_name}"
+    if [[ ! -f "${feature_dir}/${file_name}" ]]; then
+      missing_feature_files=1
+      break
+    fi
   done
+
+  if [[ "$missing_feature_files" -eq 1 ]]; then
+    archive_url="${base_url}/extracted_modality_features.zip"
+    archive_path="${root_dir}/extracted_modality_features.zip"
+
+    if url_exists "$archive_url"; then
+      download_feature_archive "$archive_url" "$archive_path" "$feature_dir" "${feature_files[@]}"
+    else
+      for file_name in "${feature_files[@]}"; do
+        download_file "${base_url}/extracted_modality_features/${file_name}" "${feature_dir}/${file_name}"
+      done
+    fi
+  fi
 fi
 
 if [[ "$include_covers" -eq 1 ]]; then

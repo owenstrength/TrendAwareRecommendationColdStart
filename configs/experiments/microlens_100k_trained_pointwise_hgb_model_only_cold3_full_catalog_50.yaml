@@ -1,0 +1,5 @@
+experiment_name: microlens_100k_trained_pointwise_hgb_model_only_cold3_full_catalog_50
+seed: 7
+top_k: 10
+data_settings_path: configs/data/microlens.full_catalog_50.yaml
+boost_settings_path: configs/model/trend_boost_trained_pointwise_hgb_model_only_cold3.yaml

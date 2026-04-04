@@ -1,0 +1,36 @@
+trend_window_hours: 72
+top_trend_fraction: 0.1
+emerging_fraction: 0.1
+min_trend_items: 20
+emerging_min_recent_interactions: 2
+emerging_smoothing: 1.0
+cold_item_max_interactions: 10
+similarity_metric: cosine
+modality_weights:
+  visual: 0.4
+  text: 0.4
+  audio: 0.2
+boost_weight: 0.1
+tag_boost_weight: 0.15
+emerging_boost_weight: 0.15
+virality_prior_smoothing: 5.0
+personalization_strength: 0.0
+base_history_weight: 0.7
+base_popularity_weight: 0.3
+trainable_ranker_enabled: true
+trainable_model_type: pointwise_hgb
+trainable_max_cases: 4000
+trainable_negatives_per_case: 20
+trainable_cold_case_weight: 3.0
+trainable_blend_weight: 0.0
+trainable_hgb_max_iter: 80
+trainable_hgb_learning_rate: 0.05
+trainable_hgb_max_depth: 4
+trainable_hgb_min_samples_leaf: 40
+trainable_hard_negative_ratio: 0.75
+trainable_hard_negative_pool_size: 64
+evaluate_trend_aware: false
+evaluate_ablation_no_personalization: false
+evaluate_baseline_no_boost: true
+evaluate_baseline_popularity: true
+evaluate_baseline_content_nn: false

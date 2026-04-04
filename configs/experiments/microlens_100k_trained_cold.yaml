@@ -1,0 +1,5 @@
+experiment_name: microlens_100k_trained_ranker_cold_aware
+seed: 7
+top_k: 10
+data_settings_path: configs/data/microlens.example.yaml
+boost_settings_path: configs/model/trend_boost_trained_cold.yaml

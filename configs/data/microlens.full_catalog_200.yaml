@@ -1,5 +1,5 @@
-# Example data configuration for the checked-in MicroLens-100k snapshot.
-dataset_name: microlens_100k
+# Harder MicroLens-100K evaluation with exhaustive observable candidates.
+dataset_name: microlens_100k_full_catalog_200
 loader: microlens
 
 interaction_path: data/raw/microlens/MicroLens-100k/MicroLens-100k_pairs.csv
@@ -21,6 +21,6 @@ popularity_column: interaction_count
 feature_dim: 64
 max_comments_per_item: 5
 evaluation_fraction: 0.2
-negatives_per_user: 99
+negatives_per_user: 0
 min_user_train_interactions: 3
-max_eval_users: 1000
+max_eval_users: 200
